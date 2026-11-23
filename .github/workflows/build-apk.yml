@@ -1,35 +1,36 @@
+name: Build Creative Library APK
+
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
+  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Extract project ZIP
+        run: |
+          unzip -q creative_library_android_source_v1.zip -d /tmp/project
+          cp -a /tmp/project/creative_library_android_project/. .
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-      - name: Extract project
-        run: |
-          unzip -q creative_library_android_source_v1.zip -d extracted
+      - name: Build APK
+        run: gradle assembleDebug
 
-      - name: Build APK
-        run: |
-          gradle -p extracted/creative_library_android_project assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: creative-library-debug-apk
-          path: extracted/creative_library_android_project/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: creative-library-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
