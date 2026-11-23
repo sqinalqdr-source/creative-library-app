@@ -94,4 +94,4 @@ jobs:
         with:
           name: Creative-Library-Signed-APK
           path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/release/app-release.apk
-          if-no-files-found: error
+          if-no-files-found: name
